@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <h1>🩺 Diabetes Risk Assessment Report</h1>
+
+    <h2>Patient Name: {{ name }}</h2>
+
+    <h2>Prediction: {{ result }}</h2>
+
+    <h2>Confidence Score: {{ probability }}%</h2>
+
+    <hr>
+
+    <h2>{{ report.risk }}</h2>
+
+    <p>{{ report.message }}</p>
+
+    <h3>Recommendations</h3>
+
+    <ul>
+        {% for item in report.recommendations %}
+            <li>{{ item }}</li>
+        {% endfor %}
+    </ul>
+
+    <br>
+
+    <a href="/">
+        <button>Predict Another Patient</button>
+    </a>
+
+    <br><br>
+
+    <a href="/history">
+        <button>View Patient History</button>
+    </a>
+
+</div>
+
+</body>
+</html>
