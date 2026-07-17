@@ -1,7 +1,11 @@
 from flask import Flask, render_template, request
 import sqlite3
+import webbrowser
+from threading import Timer
+
 from predict import predict_diabetes
 from recommendations import get_recommendation
+
 
 app = Flask(__name__)
 
@@ -42,10 +46,10 @@ def predict():
     # Predict diabetes risk
     result, probability = predict_diabetes(patient_data)
 
-    # Get AI recommendations
+    # Generate recommendation
     report = get_recommendation(result)
 
-    # Save into database
+    # Save patient data into database
     conn = sqlite3.connect("diabetes.db")
     cursor = conn.cursor()
 
@@ -104,10 +108,27 @@ def history():
 
     conn.close()
 
-    return render_template("history.html", patients=patients)
+    return render_template(
+        "history.html",
+        patients=patients
+    )
 
 
-# ---------------- Run Flask ---------------- #
+# ---------------- Automatically Open Browser ---------------- #
+
+def open_browser():
+    webbrowser.open_new("http://127.0.0.1:5000")
+
+
+# ---------------- Run Flask Application ---------------- #
 
 if __name__ == "__main__":
-    app.run(debug=True)
+
+    # Automatically open the browser
+    Timer(1, open_browser).start()
+
+    # Start Flask server
+    app.run(
+        debug=True,
+        use_reloader=False
+    )
